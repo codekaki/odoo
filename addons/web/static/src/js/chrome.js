@@ -271,6 +271,7 @@ instance.web.CrashManager = instance.web.Class.extend({
         }
         instance.web.dialog($('<div>' + QWeb.render('CrashManager.warning', {error: error}) + '</div>'), {
             title: "OpenERP " + _.str.capitalize(error.type),
+            width: 450,
             buttons: [
                 {text: _t("Ok"), click: function() { $(this).dialog("close"); }}
             ]
