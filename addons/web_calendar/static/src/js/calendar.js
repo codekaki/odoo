@@ -159,7 +159,7 @@ instance.web_calendar.CalendarView = instance.web.View.extend({
                 day_tab: _t("Day"),
                 week_tab: _t("Week"),
                 month_tab: _t("Month"),
-                new_event: _t("New event"),
+                new_event: '',
                 icon_save: _t("Save"),
                 icon_cancel: _t("Cancel"),
                 icon_details: _t("Details"),
