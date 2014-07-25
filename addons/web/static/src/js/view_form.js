@@ -2475,7 +2475,7 @@ instance.web.DateTimeWidget = instance.web.Widget.extend({
         });
 
         this.picker({
-            onClose: this.on_picker_select,
+            // onClose: this.on_picker_select,
             onSelect: this.on_picker_select,
             changeMonth: true,
             changeYear: true,
