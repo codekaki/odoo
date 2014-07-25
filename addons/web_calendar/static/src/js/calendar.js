@@ -580,7 +580,7 @@ instance.web_calendar.SidebarFilter = instance.web.Widget.extend({
     },
     events_loaded: function(filters) {
         var selected_filters = this.view.selected_filters.slice(0);
-        this.$el.html(QWeb.render('CalendarView.sidebar.responsible', { filters: filters }));
+        this.$el.html(QWeb.render('CalendarView.sidebar.responsible', { filters: _.sortBy(filters, function(f){ return f.label; })}));
         this.$('div.oe_calendar_responsible input').each(function() {
             if (_.indexOf(selected_filters, $(this).val()) > -1) {
                 $(this).click();
