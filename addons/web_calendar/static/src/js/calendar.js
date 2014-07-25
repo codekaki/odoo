@@ -190,48 +190,54 @@ instance.web_calendar.CalendarView = instance.web.View.extend({
             }
         };
 
+        this.configs = instance.web.py_eval(this.fields_view.arch.attrs['options'] || '{}');
+        _.extend(scheduler.config, {'readonly': false}, this.configs);
+
         scheduler.init(this.$el.find('.oe_calendar')[0], null, this.mode || 'month');
         scheduler.detachAllEvents();
         scheduler.attachEvent('onViewChange', this.proxy('view_changed'));
-        scheduler.attachEvent('onEventChanged', this.proxy('quick_save'));
-        scheduler.attachEvent('onEventDeleted', this.proxy('delete_event'));
-        scheduler.attachEvent('onEventAdded', function(event_id, event_obj) {
-            var fn = event_obj._force_slow_create ? 'slow_create' : 'quick_create';
-            self[fn].apply(self, arguments);
-        });
-        scheduler.attachEvent('onClick', function(event_id, mouse_event) {
-            if (!self.$el.find('.dhx_cal_editor').length && self.current_mode() === 'month') {
-                self.open_event(event_id);
-            } else {
-                return true;
-            }
-        });
-        scheduler.attachEvent('onDblClick', function(event_id, mouse_event) {
-            if (!self.$el.find('.dhx_cal_editor').length) {
-                self.open_event(event_id);
-            }
-        });
-        scheduler.attachEvent('onEmptyClick', function(start_date, mouse_event) {
-            scheduler._loading = false; // Dirty workaround for a dhtmleditor bug I couln't track
-            if (!self.$el.find('.dhx_cal_editor').length) {
-                var end_date = new Date(start_date);
-                end_date.addHours(1);
-                scheduler.addEvent({
-                    start_date: start_date,
-                    end_date: end_date,
-                    _force_slow_create: true,
-                });
-            }
-        });
-        scheduler.attachEvent("onBeforeLightbox", function (event_id) {
-            var index = self.dataset.get_id_index(event_id);
-            if (index !== null) {
-                self.open_event(self.dataset.ids[index]);
-            } else {
-                self.slow_create(event_id, scheduler.getEvent(event_id));
-            }
-           return false;
-        });
+
+        if(!scheduler.config.readonly){
+            scheduler.attachEvent('onEventChanged', this.proxy('quick_save'));
+            scheduler.attachEvent('onEventDeleted', this.proxy('delete_event'));
+            scheduler.attachEvent('onEventAdded', function(event_id, event_obj) {
+                var fn = event_obj._force_slow_create ? 'slow_create' : 'quick_create';
+                self[fn].apply(self, arguments);
+            });
+            scheduler.attachEvent('onClick', function(event_id, mouse_event) {
+                if (!self.$el.find('.dhx_cal_editor').length && self.current_mode() === 'month') {
+                    self.open_event(event_id);
+                } else {
+                    return true;
+                }
+            });
+            scheduler.attachEvent('onDblClick', function(event_id, mouse_event) {
+                if (!self.$el.find('.dhx_cal_editor').length) {
+                    self.open_event(event_id);
+                }
+            });
+            scheduler.attachEvent('onEmptyClick', function(start_date, mouse_event) {
+                scheduler._loading = false; // Dirty workaround for a dhtmleditor bug I couln't track
+                if (_.isEmpty(scheduler._events) && !self.$el.find('.dhx_cal_editor').length) {
+                    var end_date = new Date(start_date);
+                    end_date.addHours(1);
+                    scheduler.addEvent({
+                        start_date: start_date,
+                        end_date: end_date,
+                        _force_slow_create: true,
+                    });
+                }
+            });
+            scheduler.attachEvent("onBeforeLightbox", function (event_id) {
+                var index = self.dataset.get_id_index(event_id);
+                if (index !== null) {
+                    self.open_event(self.dataset.ids[index]);
+                } else {
+                    self.slow_create(event_id, scheduler.getEvent(event_id));
+                }
+               return false;
+            });
+        }
 
         this.refresh_scheduler();
 
