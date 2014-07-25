@@ -735,7 +735,7 @@ class ir_model_access(osv.osv):
                        )
             r = cr.fetchone()[0]
 
-        if not r and raise_exception:
+        if not r:
             groups = '\n\t'.join('- %s' % g for g in self.group_names_with_access(cr, model_name, mode))
             msg_heads = {
                 # Messages are declared in extenso so they are properly exported in translation terms
@@ -752,7 +752,8 @@ class ir_model_access(osv.osv):
                 msg_params = (model_name,)
             _logger.warning('Access Denied by ACLs for operation: %s, uid: %s, model: %s', mode, uid, model_name)
             msg = '%s %s' % (msg_heads[mode], msg_tail)
-            raise except_orm(_('Access Denied'), msg % msg_params)
+            if raise_exception:
+                raise except_orm(_('Access Denied'), msg % msg_params)
         return r or False
 
     __cache_clearing_methods = []
