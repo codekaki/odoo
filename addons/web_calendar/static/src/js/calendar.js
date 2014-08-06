@@ -220,7 +220,6 @@ instance.web_calendar.CalendarView = instance.web.View.extend({
                 scheduler._loading = false; // Dirty workaround for a dhtmleditor bug I couln't track
                 if (_.isEmpty(scheduler._events) && !self.$el.find('.dhx_cal_editor').length) {
                     var end_date = new Date(start_date);
-                    end_date.addHours(1);
                     scheduler.addEvent({
                         start_date: start_date,
                         end_date: end_date,
@@ -480,12 +479,12 @@ instance.web_calendar.CalendarView = instance.web.View.extend({
         }
         this.is_slow_open = true;
         if (this.current_mode() === 'month') {
-            event_obj['start_date'].addHours(8);
+            var offset = new Date().getTimezoneOffset() / 60 * -1;
+            event_obj['start_date'].addHours(offset);
             if (event_obj._length === 1) {
                 event_obj['end_date'] = new Date(event_obj['start_date']);
-                event_obj['end_date'].addHours(1);
             } else {
-                event_obj['end_date'].addHours(-4);
+                event_obj['end_date'].addHours(offset - 24);
             }
         }
         var defaults = {};
