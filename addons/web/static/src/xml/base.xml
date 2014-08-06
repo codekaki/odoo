@@ -1022,6 +1022,7 @@
                 t-att-autofocus="widget.node.attrs.autofocus"
                 t-att-placeholder="widget.node.attrs.placeholder"
                 t-att-maxlength="widget.field.size"
+                t-att-readonly="widget.options.readonly"
             /><img class="oe_field_translate oe_input_icon" t-if="widget.field.translate" t-att-src='_s + "/web/static/src/img/icons/terp-translate.png"' width="16" height="16" border="0"/>
         </t>
         <t t-if="widget.get('effective_readonly')">
