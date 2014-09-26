@@ -141,7 +141,11 @@ class hr_holidays(osv.osv):
         for holiday in self.browse(cr, uid, ids):
             holiday_ids = self.search(cr, uid, [('type', '=', holiday.type), ('state', 'in', ['draft', 'confirm', 'validate1', 'validate']), ('date_from', '<=', holiday.date_to), ('date_to', '>=', holiday.date_from), ('employee_id', '=', holiday.employee_id.id), ('id', '<>', holiday.id)])
             if holiday_ids:
-                return False
+                total = holiday.number_of_days_temp 
+                for match in self.browse(cr, uid, holiday_ids):
+                    total += match.number_of_days_temp
+                if total > 1:
+                    return False
         return True
 
     _columns = {
