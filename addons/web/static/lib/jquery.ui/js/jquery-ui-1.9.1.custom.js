@@ -8309,7 +8309,7 @@ $.widget("ui.dialog", {
 		show: null,
 		stack: true,
 		title: "",
-		width: 300,
+		width: 400,
 		zIndex: 1000
 	},
 
