@@ -2323,7 +2323,7 @@ class BaseModel(object):
                          if view_type == 'tree' or not action[2].get('multi')]
             resprint = [clean(print_) for print_ in resprint
                         if view_type == 'tree' or not print_[2].get('multi')]
-            #When multi="True" set it will display only in More of the list view 
+            #When multi="True" set it will display only in More of the list view
             resrelate = [clean(action) for action in resrelate
                          if (action[2].get('multi') and view_type == 'tree') or (not action[2].get('multi') and view_type == 'form')]
 
@@ -2629,7 +2629,7 @@ class BaseModel(object):
     def _read_group_prepare(self, orderby, aggregated_fields, groupby, qualified_groupby_field, query, groupby_type=None):
         """
         Prepares the GROUP BY and ORDER BY terms for the read_group method. Adds the missing JOIN clause
-        to the query if order should be computed against m2o field. 
+        to the query if order should be computed against m2o field.
         :param orderby: the orderby definition in the form "%(field)s %(order)s"
         :param aggregated_fields: list of aggregated fields in the query
         :param groupby: the current groupby field name
@@ -2641,7 +2641,7 @@ class BaseModel(object):
         orderby_terms = []
         groupby_terms = [qualified_groupby_field] if groupby else []
         if not orderby:
-            return groupby_terms, orderby_terms    
+            return groupby_terms, orderby_terms
 
         self._check_qorder(orderby)
         for order_part in orderby.split(','):
@@ -2893,7 +2893,8 @@ class BaseModel(object):
 
     def _check_selection_field_value(self, cr, uid, field, value, context=None):
         """Raise except_orm if value is not among the valid values for the selection field"""
-        if self._columns[field]._type == 'reference':
+        col = self._columns[field]
+        if col._type == 'reference':
             val_model, val_id_str = value.split(',', 1)
             val_id = False
             try:
@@ -2902,17 +2903,17 @@ class BaseModel(object):
                 pass
             if not val_id:
                 raise except_orm(_('ValidateError'),
-                                 _('Invalid value for reference field "%s.%s" (last part must be a non-zero integer): "%s"') % (self._table, field, value))
+                                 _('Invalid value for reference field "%s" (last part must be a non-zero integer): "%s"') % (col.string or col.name, value))
             val = val_model
         else:
             val = value
-        if isinstance(self._columns[field].selection, (tuple, list)):
-            if val in dict(self._columns[field].selection):
+        if isinstance(col.selection, (tuple, list)):
+            if val in dict(col.selection):
                 return
-        elif val in dict(self._columns[field].selection(self, cr, uid, context=context)):
+        elif val in dict(col.selection(self, cr, uid, context=context)):
             return
         raise except_orm(_('ValidateError'),
-                         _('The value "%s" for the field "%s.%s" is not in the selection') % (value, self._table, field))
+                         _('The value "%s" for the field "%s" is not in the selection') % (value, col.string or col.name))
 
     def _check_removed_columns(self, cr, log=False):
         # iterate on the database columns to drop the NOT NULL constraints
@@ -3976,7 +3977,7 @@ class BaseModel(object):
                 if operation in ('read','unlink'):
                     # No need to warn about deleting an already deleted record.
                     # And no error when reading a record that was deleted, to prevent spurious
-                    # errors for non-transactional search/read sequences coming from clients 
+                    # errors for non-transactional search/read sequences coming from clients
                     return
                 _logger.warning('Failed operation on deleted record(s): %s, uid: %s, model: %s', operation, uid, self._name)
                 raise except_orm(_('Missing document(s)'),
@@ -4437,7 +4438,7 @@ class BaseModel(object):
             self._transient_vacuum(cr, user)
 
         self.check_access_rights(cr, user, 'create')
-        
+
         vals = self._add_missing_default_values(cr, user, vals, context)
 
         if self._log_access:
@@ -4484,12 +4485,12 @@ class BaseModel(object):
                 del vals[self._inherits[table]]
 
             record_id = tocreate[table].pop('id', None)
-            
+
             # When linking/creating parent records, force context without 'no_store_function' key that
-            # defers stored functions computing, as these won't be computed in batch at the end of create(). 
+            # defers stored functions computing, as these won't be computed in batch at the end of create().
             parent_context = dict(context)
             parent_context.pop('no_store_function', None)
-            
+
             if record_id is None or not record_id:
                 record_id = self.pool.get(table).create(cr, user, tocreate[table], context=parent_context)
             else:
@@ -4538,7 +4539,7 @@ class BaseModel(object):
                 upd0 = upd0 + ',"' + field + '"'
                 upd1 = upd1 + ',' + self._columns[field]._symbol_set[0]
                 upd2.append(self._columns[field]._symbol_set[1](vals[field]))
-                #for the function fields that receive a value, we set them directly in the database 
+                #for the function fields that receive a value, we set them directly in the database
                 #(they may be required), but we also need to trigger the _fct_inv()
                 if (hasattr(self._columns[field], '_fnct_inv')) and not isinstance(self._columns[field], fields.related):
                     #TODO: this way to special case the related fields is really creepy but it shouldn't be changed at
