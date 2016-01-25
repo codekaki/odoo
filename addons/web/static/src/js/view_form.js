@@ -1700,6 +1700,14 @@ instance.web.form.compute_domain = function(expr, fields) {
         var op = ex[1];
         var val = ex[2];
 
+        if(typeof val == 'string'){
+            var mo = val.match(/\${(\w+)}/);
+            if(mo != null){
+                var f2 = fields[mo[1]];
+                val = f2.get_value? f2.get_value() : f2.value;
+            }
+        }
+
         switch (op.toLowerCase()) {
             case '=':
             case '==':
