@@ -20,6 +20,7 @@
 #
 ##############################################################################
 
+import math
 import time
 from datetime import date
 from datetime import datetime
@@ -70,9 +71,9 @@ class hr_payroll_structure(osv.osv):
     }
 
     _constraints = [
-        (osv.osv._check_recursion, 'Error ! You cannot create a recursive Salary Structure.', ['parent_id']) 
+        (osv.osv._check_recursion, 'Error ! You cannot create a recursive Salary Structure.', ['parent_id'])
     ]
-        
+
     def copy(self, cr, uid, id, default=None, context=None):
         """
         Create a new record in hr_payroll_structure model from existing one
@@ -588,7 +589,7 @@ class hr_payslip(osv.osv):
 
         for contract in self.pool.get('hr.contract').browse(cr, uid, contract_ids, context=context):
             employee = contract.employee_id
-            localdict = dict(baselocaldict, employee=employee, contract=contract)
+            localdict = dict(baselocaldict, employee=employee, contract=contract, math=math)
             for rule in obj_rule.browse(cr, uid, sorted_rule_ids, context=context):
                 key = rule.code + '-' + str(contract.id)
                 localdict['result'] = None
