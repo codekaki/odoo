@@ -114,7 +114,7 @@ class hr_job(osv.osv):
         'requirements': fields.text('Requirements'),
         'department_id': fields.many2one('hr.department', 'Department'),
         'company_id': fields.many2one('res.company', 'Company'),
-        'state': fields.selection([('open', 'No Recruitment'), ('recruit', 'Recruitement in Progress')], 'Status', readonly=True, required=True,
+        'state': fields.selection([('open', 'No Recruitment'), ('recruit', 'Recruitment in Progress')], 'Status', readonly=True, required=True,
             help="By default 'In position', set it to 'In Recruitment' if recruitment process is going on for this job position."),
     }
     _defaults = {
@@ -154,10 +154,10 @@ class hr_employee(osv.osv):
         for obj in self.browse(cr, uid, ids, context=context):
             result[obj.id] = tools.image_get_resized_images(obj.image)
         return result
-    
+
     def _set_image(self, cr, uid, id, name, value, args, context=None):
         return self.write(cr, uid, [id], {'image': tools.image_resize_image_big(value)}, context=context)
-    
+
     _columns = {
         #we need a related field in order to be able to sort the employee by name
         'name_related': fields.related('resource_id', 'name', type='char', string='Name', readonly=True, store=True),
@@ -211,13 +211,13 @@ class hr_employee(osv.osv):
     }
 
     _order='name_related'
-    
+
     def copy_data(self, cr, uid, ids, default=None, context=None):
         if default is None:
             default = {}
         default.update({'child_ids': False})
         return super(hr_employee, self).copy_data(cr, uid, ids, default, context=context)
-        
+
     def create(self, cr, uid, data, context=None):
         employee_id = super(hr_employee, self).create(cr, uid, data, context=context)
         try:
@@ -313,7 +313,7 @@ class res_users(osv.osv):
             default = {}
         default.update({'employee_ids': False})
         return super(res_users, self).copy_data(cr, uid, ids, default, context=context)
-    
+
     def create(self, cr, uid, data, context=None):
         user_id = super(res_users, self).create(cr, uid, data, context=context)
 
