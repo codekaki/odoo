@@ -3780,7 +3780,7 @@ scheduler.render_event_bar = function (ev) {
 	var html = '<div event_id="' + ev.id + '" class="' + cs + '" style="position:absolute; top:' + y + 'px; left:' + x + 'px; width:' + (x2 - x - 15) + 'px;' + color + '' + bg_color + '' + (ev._text_style || "") + '">';
 
 	ev = scheduler.getEvent(ev.id); // ev at this point could be a part of a larged event
-	if (ev._timed)
+    if (/* ev._timed */false)
 		html += scheduler.templates.event_bar_date(ev.start_date, ev.end_date, ev);
 	html += scheduler.templates.event_bar_text(ev.start_date, ev.end_date, ev) + '</div>';
 	html += '</div>';
