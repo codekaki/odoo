@@ -200,7 +200,7 @@
                 </tree>
             </field>
         </record>
-        
+
         <act_window name="Payslip Computation Details"
             context="{'default_slip_id': active_id,'search_default_slip_id': active_id}"
             res_model="hr.payslip.line"
@@ -370,7 +370,7 @@
             <field name="search_view_id" ref="view_hr_payslip_filter"/>
         </record>
 
-        <menuitem action="action_view_hr_payslip_form" id="menu_department_tree" parent="menu_hr_root_payroll" groups="base.group_hr_user"/>        
+        <menuitem action="action_view_hr_payslip_form" id="menu_department_tree" parent="menu_hr_root_payroll" groups="base.group_hr_user"/>
 
         <record id="act_hr_employee_payslip_list" model="ir.actions.act_window">
             <field name="res_model">hr.payslip</field>
@@ -592,7 +592,7 @@
                                 <field name="amount_percentage_base" attrs="{'invisible':[('amount_select','&lt;&gt;','percentage')], 'required': [('amount_select','=','percentage')]}"/><newline/>
                                 <field name="quantity" attrs="{'invisible':[('amount_select','=','code')], 'required':[('amount_select','!=','code')]}"/><newline/>
                                 <field name="amount_fix"  attrs="{'invisible':[('amount_select','&lt;&gt;','fix')], 'required':[('amount_select','=','fix')]}"/><newline/>
-                                <field name="amount_percentage" attrs="{'invisible':[('amount_select','&lt;&gt;','percentage')], 'required':[('amount_select','=','percentage')]}"/>
+                                <field name="amount_percentage" attrs="{'invisible':[('amount_select','&lt;&gt;','percentage')], 'required':[('amount_select','=','percentage')]}"/><newline/>
                                 <field colspan="4" name="amount_python_compute" attrs="{'invisible':[('amount_select','&lt;&gt;','code')], 'required':[('amount_select','=','code')]}"/>
                                 <separator colspan="4" string="Company Contribution"/>
                                 <field name="register_id"/>
@@ -700,9 +700,9 @@
                         <field name="name"/>
                     </h1>
                     <h2>
-                        Period from 
-                        <field name="date_start"/> 
-                        to 
+                        Period from
+                        <field name="date_start"/>
+                        to
                         <field name="date_end"/>
                     </h2>
                     <group col="4">
