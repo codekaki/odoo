@@ -188,7 +188,7 @@
 <t t-name="ViewManager.switch-buttons">
     <t t-foreach="views" t-as="view">
         <button type="button" t-att-accesskey="view.accesskey"
-            t-attf-class="btn btn-default fa #{view.icon} oe-cp-switch-#{view.type}" 
+            t-attf-class="btn btn-default fa #{view.icon} oe-cp-switch-#{view.type}"
             t-att-data-view-type="view.type" t-att-title="view.label"/>
     </t>
 </t>
@@ -217,8 +217,8 @@
     <t t-if="is_admin">
         <li class="oe_translate"><a href="#" data-action="translate">Technical Translation</a></li>
         <li class="oe_edit_view"><a href="#" data-action="edit" data-model="ir.ui.view" t-att-data-id="active_view.controller.fields_view.view_id">Edit <t t-esc="_.str.capitalize(view.fields_view.type)"/> View</a></li>
-        <li class="oe_edit_searchview" t-if="searchview"><a href="#" data-action="edit" data-model="ir.ui.view" t-att-data-id="searchview.view_id">Edit SearchView</a></li> 
-        <li class="oe_edit_action" t-if="action"><a href="#" data-action="edit" t-att-data-model="action.type" t-att-data-id="action.id">Edit Action</a></li> 
+        <li class="oe_edit_searchview" t-if="searchview"><a href="#" data-action="edit" data-model="ir.ui.view" t-att-data-id="searchview.view_id">Edit SearchView</a></li>
+        <li class="oe_edit_action" t-if="action"><a href="#" data-action="edit" t-att-data-model="action.type" t-att-data-id="action.id">Edit Action</a></li>
         <li class="oe_edit_workflow"><a href="#" data-action="edit_workflow">Edit Workflow</a></li>
         <li class="oe_print_workflow"><a href="#" data-action="print_workflow">Print Workflow</a></li>
         <li class="divider"/>
@@ -414,7 +414,7 @@
 <t t-name="ListView.buttons">
     <t t-if="!widget.no_leaf and widget.options.action_buttons !== false and widget.options.addable and widget.is_action_enabled('create')">
     <div class="oe_list_buttons">
-        <button type="button" class="btn btn-sm btn-primary o_list_button_add" accesskey="C">
+        <button type="button" class="btn btn-sm btn-primary o_list_button_add" accesskey="C" t-att-data-model="widget.model">
             <t t-esc="widget.options.addable"/>
         </button>
     </div>
@@ -496,18 +496,19 @@
         <div class="o_form_buttons_view">
             <button t-if="widget.is_action_enabled('edit')"
                     type="button"
-                    class="oe_form_button_edit btn btn-default btn-sm" accesskey="E">
+                    class="oe_form_button_edit btn btn-default btn-sm" accesskey="E" t-att-data-model="widget.model">
                 Edit
             </button>
             <button t-if="widget.is_action_enabled('create')"
                     type="button" class="oe_form_button_create btn btn-default btn-sm"
-                    accesskey="C">
+                    accesskey="C"
+                    t-att-data-model="widget.model">
                 Create
             </button>
         </div>
         <span class="o_form_buttons_edit">
-            <button type="button" class="oe_form_button_save btn btn-primary btn-sm" accesskey="S">Save</button>
-            <button type="button" class="oe_form_button_cancel btn btn-sm btn-default" accesskey="D">Discard</button>
+            <button type="button" class="oe_form_button_save btn btn-primary btn-sm" accesskey="S" t-att-data-model="widget.model">Save</button>
+            <button type="button" class="oe_form_button_cancel btn btn-sm btn-default" accesskey="D" t-att-data-model="widget.model">Discard</button>
         </span>
     </t>
 </div>
@@ -710,6 +711,8 @@
             <input t-att-type="widget.password ? 'password' : 'text'"
                 t-att-barcode_events="widget.options.barcode_events"
                 t-att-id="widget.id_for_label"
+                t-att-name="widget.name"
+                t-att-data-model="widget.view and widget.view.model"
                 t-att-tabindex="widget.node.attrs.tabindex"
                 t-att-autofocus="widget.node.attrs.autofocus"
                 t-att-placeholder="widget.node.attrs.placeholder"
@@ -717,7 +720,7 @@
             /><img class="oe_field_translate oe_input_icon" t-if="widget.field.translate" t-att-src='_s + "/web/static/src/img/icons/terp-translate.png"' width="16" height="16" border="0"/>
         </t>
         <t t-if="widget.get('effective_readonly')">
-            <span class="oe_form_char_content"></span>
+            <span class="oe_form_char_content" t-att-data-name="widget.name" t-att-data-model="widget.view and widget.view.model"></span>
         </t>
     </span>
 </t>
@@ -747,6 +750,8 @@
             <div>
                 <input type="text"
                     t-att-id="widget.id_for_label"
+                    t-att-name="widget.name"
+                    t-att-data-model="widget.view and widget.view.model"
                     t-att-tabindex="widget.node.attrs.tabindex"
                     t-att-autofocus="widget.node.attrs.autofocus"
                     t-att-placeholder="widget.node.attrs.placeholder"
@@ -766,6 +771,7 @@
         <t t-if="!widget.get('effective_readonly')">
             <textarea rows="6"
                 t-att-name="widget.name"
+                t-att-data-model="widget.view and widget.view.model"
                 class="field_text"
                 t-att-tabindex="widget.node.attrs.tabindex"
                 t-att-autofocus="widget.node.attrs.autofocus"
@@ -777,7 +783,7 @@
             />
         </t>
         <t t-if="widget.get('effective_readonly')">
-            <span class="oe_form_text_content"></span>
+            <span class="oe_form_text_content" t-att-data-name="widget.name" t-att-data-model="widget.view and widget.view.model"></span>
         </t>
     </div>
 </t>
@@ -785,7 +791,7 @@
     <div t-att-class="'oe_form_field oe_form_field_html' + (widget.get('effective_readonly') ? ' oe_form_embedded_html' : '')"
             t-att-style="widget.node.attrs.style">
         <t t-if="! widget.get('effective_readonly')">
-            <textarea/>
+            <textarea t-att-name="widget.name"/>
         </t>
     </div>
 </t>
@@ -808,10 +814,10 @@
     </div>
 </t>
 <t t-name="FieldDate">
-    <span class="oe_form_field oe_datepicker_root oe_form_field_date" t-att-style="widget.node.attrs.style"/>
+    <span class="oe_form_field oe_datepicker_root oe_form_field_date" t-att-data-name="widget.name" t-att-data-model="widget.view and widget.view.model" t-att-style="widget.node.attrs.style"/>
 </t>
 <t t-name="FieldDatetime">
-    <span class="oe_form_field oe_datepicker_root oe_form_field_datetime" t-att-style="widget.node.attrs.style"/>
+    <span class="oe_form_field oe_datepicker_root oe_form_field_datetime" t-att-data-name="widget.name" t-att-data-model="widget.view and widget.view.model" t-att-style="widget.node.attrs.style"/>
 </t>
 <t t-name="FieldSelection">
     <span class="oe_form_field oe_form_field_selection" t-att-style="widget.node.attrs.style">
@@ -820,6 +826,7 @@
 <t t-name="FieldSelectionSelect">
     <select t-if="!widget.get('effective_readonly')"
         t-att-name="widget.name"
+        t-att-data-model="widget.view and widget.view.model"
         t-att-tabindex="widget.node.attrs.tabindex"
         t-att-autofocus="widget.node.attrs.autofocus"
         t-att-id="widget.id_for_label">
@@ -845,7 +852,7 @@
 <t t-name="FieldMany2One">
     <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button" t-att-style="widget.node.attrs.style">
         <t t-if="widget.get('effective_readonly')">
-            <a t-if="! widget.options.no_open" href="#" class="oe_form_uri"/>
+            <a t-if="! widget.options.no_open" href="#" t-att-data-name="widget.name" t-att-data-model="widget.view and widget.view.model" class="oe_form_uri"/>
             <span t-if="widget.options.no_open" href="#" class="oe_form_uri"/>
             <span class="oe_form_m2o_follow"/>
         </t>
@@ -856,6 +863,8 @@
                 <input type="text"
                     t-att-barcode_events="widget.options.barcode_events"
                     t-att-id="widget.id_for_label"
+                    t-att-name="widget.name"
+                    t-att-data-model="widget.view and widget.view.model"
                     t-att-tabindex="widget.node.attrs.tabindex"
                     t-att-autofocus="widget.node.attrs.autofocus"
                     t-att-placeholder="widget.node.attrs.placeholder"
@@ -908,6 +917,7 @@
         <input type="checkbox"
             t-att-id="widget.id_for_label"
             t-att-name="widget.name"
+            t-att-data-model="widget.view and widget.view.model"
             t-att-tabindex="widget.node.attrs.tabindex"
             t-att-autofocus="widget.node.attrs.autofocus"
             class="field_boolean"/>
