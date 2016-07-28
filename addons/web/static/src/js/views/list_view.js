@@ -563,11 +563,11 @@ var ListView = View.extend( /** @lends instance.web.ListView# */ {
             _.each(values, function (value, key) {
                 if (fields[key] && fields[key].type === 'many2many')
                     record.set(key + '__display', false, {silent: true});
-                record.set(key, value, {silent: true});            
+                record.set(key, value, {silent: true});
             });
             record.trigger('change', record);
 
-            /* When a record is reloaded, there is a rendering lag because of the addition/suppression of 
+            /* When a record is reloaded, there is a rendering lag because of the addition/suppression of
             a table row. Since the list view editable need to wait for the end of this rendering lag before
             computing the position of the editable fields, a 100ms delay is added. */
             var def = $.Deferred();
@@ -988,7 +988,7 @@ ListView.List = Class.extend( /** @lends instance.web.ListView.List# */{
      *
      * @constructs instance.web.ListView.List
      * @extends instance.web.Class
-     * 
+     *
      * @param {Object} opts display options, identical to those of :js:class:`instance.web.ListView`
      */
     init: function (group, opts) {
@@ -1084,7 +1084,7 @@ ListView.List = Class.extend( /** @lends instance.web.ListView.List# */{
                       field = $target.closest('td').data('field'),
                        $row = $target.closest('tr'),
                   record_id = self.row_id($row);
-                
+
                 if ($target.attr('disabled')) {
                     return;
                 }
@@ -1180,7 +1180,7 @@ ListView.List = Class.extend( /** @lends instance.web.ListView.List# */{
                     .call('name_get', [ids, this.dataset.get_context()]).done(function (names) {
                         // FIXME: nth horrible hack in this poor listview
                         record.set(column.id + '__display',
-                                   _(names).pluck(1).join(', '));
+                                   _(names).pluck(1).join('\n'));
                         record.set(column.id, ids);
                     });
                 // temp empty value
@@ -1491,7 +1491,7 @@ ListView.Groups = Class.extend( /** @lends instance.web.ListView.Groups# */{
                     }
                     group_label = _.str.escapeHTML(group_label);
                 }
-                    
+
                 // group_label is html-clean (through format or explicit
                 // escaping if format failed), can inject straight into HTML
                 $group_column.html(_.str.sprintf(_t("%s (%d)"),
@@ -1910,7 +1910,7 @@ var MetaColumn = Column.extend({
     }
 });
 // to do: do this in a better way (communicate with view_list_editable)
-ListView.MetaColumn = MetaColumn;  
+ListView.MetaColumn = MetaColumn;
 
 var ColumnButton = Column.extend({
     /**
