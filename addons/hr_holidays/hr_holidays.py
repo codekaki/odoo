@@ -184,15 +184,15 @@ class hr_holidays(osv.osv):
     }
     _constraints = [
         (_check_date, 'You can not have 2 leaves that overlaps on same day!', ['date_from','date_to']),
-    ] 
-    
+    ]
+
     _sql_constraints = [
-        ('type_value', "CHECK( (holiday_type='employee' AND employee_id IS NOT NULL) or (holiday_type='category' AND category_id IS NOT NULL))", 
+        ('type_value', "CHECK( (holiday_type='employee' AND employee_id IS NOT NULL) or (holiday_type='category' AND category_id IS NOT NULL))",
          "The employee or employee category of this request is missing. Please make sure that your user login is linked to an employee."),
         ('date_check2', "CHECK ( (type='add') OR (date_from <= date_to))", "The start date must be anterior to the end date."),
         ('date_check', "CHECK ( number_of_days_temp >= 0 )", "The number of days must be greater than 0."),
     ]
-    
+
     def copy(self, cr, uid, id, default=None, context=None):
         if default is None:
             default = {}
@@ -254,8 +254,8 @@ class hr_holidays(osv.osv):
 
     def unlink(self, cr, uid, ids, context=None):
         for rec in self.browse(cr, uid, ids, context=context):
-            if rec.state not in ['draft', 'cancel', 'confirm']:
-                raise osv.except_osv(_('Warning!'),_('You cannot delete a leave which is in %s state.')%(rec.state))
+            if rec.type == 'remove' and rec.state not in ['draft', 'cancel', 'confirm']:
+                raise osv.except_osv(_('Warning!'), _('You cannot delete a leave which is in %s state.')%(rec.state))
         return super(hr_holidays, self).unlink(cr, uid, ids, context)
 
     def onchange_date_from(self, cr, uid, ids, date_to, date_from):
